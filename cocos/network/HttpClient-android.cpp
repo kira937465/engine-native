@@ -247,6 +247,32 @@ public:
         return message;
     }
     
+    char* getErrStr()
+    {
+        char* message = nullptr;
+        JniMethodInfo methodInfo;
+        if (JniHelper::getStaticMethodInfo(methodInfo,
+                                           JCLS_HTTPCLIENT,
+                                           "getErrStr",
+                                           "()Ljava/lang/String;"))
+        {
+            jobject jObj = methodInfo.env->CallStaticObjectMethod(
+                                                                  methodInfo.classID, methodInfo.methodID);
+            message = getBufferFromJString((jstring)jObj, methodInfo.env);
+            if (nullptr != jObj)
+            {
+                methodInfo.env->DeleteLocalRef(jObj);
+            }
+            methodInfo.env->DeleteLocalRef(methodInfo.classID);
+        }
+        else
+        {
+            CCLOGERROR("HttpClient::%s failed!", __FUNCTION__);
+        }
+        
+        return message;
+    }
+
     void sendRequest(HttpRequest* request)
     {
         JniMethodInfo methodInfo;
@@ -733,7 +759,7 @@ void HttpClient::processResponse(HttpResponse* response, char* responseMessage)
     if (0 != suc)
     {
         response->setSucceed(false);
-        response->setErrorBuffer("connect failed");
+        response->setErrorBuffer(urlConnection.getErrStr());
         response->setResponseCode(responseCode);
         return;
     }
@@ -749,7 +775,7 @@ void HttpClient::processResponse(HttpResponse* response, char* responseMessage)
     if (0 == responseCode)
     {
        response->setSucceed(false);
-       response->setErrorBuffer("connect failed");
+       response->setErrorBuffer(urlConnection.getErrStr());
        response->setResponseCode(-1);
        return;
     }

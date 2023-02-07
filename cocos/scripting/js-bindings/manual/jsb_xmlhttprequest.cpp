@@ -444,6 +444,7 @@ void XMLHttpRequest::onResponse(HttpClient* client, HttpResponse* response)
     {
         std::string errorBuffer = response->getErrorBuffer();
         SE_LOGD("Response failed, error buffer: %s\n", errorBuffer.c_str());
+        _responseText = errorBuffer;
         if (statusCode == 0 || statusCode == -1)
         {
             _errorFlag = true;

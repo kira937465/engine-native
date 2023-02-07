@@ -60,6 +60,8 @@ public class Cocos2dxHttpURLConnection
     private static final String POST_METHOD = "POST" ;
     private static final String PUT_METHOD = "PUT" ;
 
+    private static String errStr = "" ;
+
     static HttpURLConnection createHttpURLConnection(String linkURL) {
         URL url;
         HttpURLConnection urlConnection;
@@ -72,6 +74,9 @@ public class Cocos2dxHttpURLConnection
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "createHttpURLConnection:" + e.toString());
+
+            errStr = e.toString();
+
             return null;
         }
 
@@ -91,6 +96,8 @@ public class Cocos2dxHttpURLConnection
             }
         } catch (ProtocolException e) {
             Log.e(TAG, "setRequestMethod:" + e.toString());
+
+            errStr = e.toString();
         }
 
     }
@@ -137,6 +144,8 @@ public class Cocos2dxHttpURLConnection
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "setVerifySSL:" + e.toString());
+
+            errStr = e.toString();
         }
     }
 
@@ -154,6 +163,8 @@ public class Cocos2dxHttpURLConnection
             e.printStackTrace();
             Log.e(TAG, "connect" + e.toString());
             suc = 1;
+
+            errStr = e.toString();
         }
 
         return suc;
@@ -174,6 +185,8 @@ public class Cocos2dxHttpURLConnection
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "sendRequest:" + e.toString());
+
+            errStr = e.toString();
         }
     }
 
@@ -276,6 +289,9 @@ public class Cocos2dxHttpURLConnection
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "1 getResponseContent: " + e.toString());
+
+            errStr = e.toString();
+
             return null;
         }
 
@@ -293,6 +309,8 @@ public class Cocos2dxHttpURLConnection
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "2 getResponseContent:" + e.toString());
+
+            errStr = e.toString();
         }
 
         return null;
@@ -305,6 +323,8 @@ public class Cocos2dxHttpURLConnection
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "getResponseCode:" + e.toString());
+
+            errStr = e.toString();
         }
         return code;
     }
@@ -320,6 +340,16 @@ public class Cocos2dxHttpURLConnection
         }
 
         return msg;
+    }
+
+    static String getErrStr() {
+        if (errStr != null) {
+            Log.e(TAG, "errStr:" + errStr);
+
+            return errStr;
+        } else {
+            return "";
+        }
     }
 
     public static String listToString(List<String> list, String strInterVal) {
