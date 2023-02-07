@@ -265,7 +265,8 @@ public class Cocos2dxEditBox {
         }
 
         private void setTopMargin(int topMargin) {
-            mTopMargin = topMargin;
+            // mTopMargin = topMargin;
+            mTopMargin = topMargin - 55 * (getRootView().getHeight() >= 2280 ? 2 : 1);
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mEditText.getLayoutParams();
             layoutParams.topMargin = mTopMargin - getHeight();
             setLayoutParams(layoutParams);
